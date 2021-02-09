@@ -17,8 +17,9 @@ fn main() {
     println!("{}", count);
 }
 
-fn count_colors(img: &mut DynamicImage) -> usize {
+fn count_colors(img: &mut DynamicImage) -> f32 {
     let mut dict: HashMap<u32, bool> = HashMap::new();
+    let mut pixel_count: usize = 0;
     for (_, _, pixel) in img.pixels() {
         let red = pixel[0];
         let green = pixel[1];
@@ -27,7 +28,8 @@ fn count_colors(img: &mut DynamicImage) -> usize {
         let key: u32 =
             unsafe { std::mem::transmute::<[u8; 4], u32>([red, green, blue, alpha]).to_be() };
 
+        pixel_count = pixel_count + 1;
         dict.insert(key, true);
     }
-    return dict.len();
+    return dict.len() as f32 / pixel_count as f32;
 }
